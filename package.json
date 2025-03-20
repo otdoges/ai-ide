@@ -1,0 +1,38 @@
+{
+  "name": "electron-ide-app",
+  "version": "1.0.0",
+  "description": "Electron-based IDE with AI integration",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder"
+  },
+  "keywords": [
+    "electron",
+    "ide",
+    "ai",
+    "editor",
+    "vscode"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.2.1",
+    "electron-builder": "^24.9.1"
+  },
+  "dependencies": {
+    "@azure-rest/ai-inference": "^1.0.0-beta.4",
+    "@azure/core-auth": "^1.5.2",
+    "@azure/core-sse": "^1.2.4",
+    "monaco-editor": "^0.45.0",
+    "dotenv": "^16.4.5",
+    "split.js": "^1.6.5",
+    "@vscode/codicons": "^0.0.35",
+    "vscode-icons-js": "^11.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "pnpm": ">=8.0.0"
+  }
+} 

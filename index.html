@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>AI-Powered IDE</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="node_modules/@vscode/codicons/dist/codicon.css">
+    <script src="node_modules/monaco-editor/min/vs/loader.js"></script>
+    <script src="node_modules/split.js/dist/split.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="activity-bar">
+            <div class="activity-bar-icon" title="Explorer">
+                <span class="codicon codicon-files"></span>
+            </div>
+            <div class="activity-bar-icon" title="Search">
+                <span class="codicon codicon-search"></span>
+            </div>
+            <div class="activity-bar-icon" title="Source Control">
+                <span class="codicon codicon-source-control"></span>
+            </div>
+            <div class="activity-bar-icon" title="Run and Debug">
+                <span class="codicon codicon-debug"></span>
+            </div>
+            <div class="activity-bar-icon" title="AI Assistant">
+                <span class="codicon codicon-light-bulb"></span>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-title">Explorer</span>
+                <div class="sidebar-actions">
+                    <span class="codicon codicon-new-file"></span>
+                    <span class="codicon codicon-new-folder"></span>
+                    <span class="codicon codicon-refresh"></span>
+                </div>
+            </div>
+            <div id="file-tree"></div>
+        </div>
+        
+        <div class="main-content">
+            <div class="editor-container" id="editor-container"></div>
+            
+            <div class="chat-container">
+                <div class="chat-header">
+                    <span class="sidebar-title">AI Assistant</span>
+                    <div class="chat-actions">
+                        <span class="codicon codicon-clear-all"></span>
+                    </div>
+                </div>
+                <div class="chat-messages" id="chat-messages"></div>
+                <div class="chat-input-container">
+                    <textarea id="chat-input" placeholder="Ask AI anything..."></textarea>
+                    <button id="send-button">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="status-bar">
+        <span>Ready</span>
+    </div>
+    <script src="renderer.js"></script>
+</body>
+</html> 

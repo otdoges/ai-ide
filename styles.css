@@ -1,0 +1,163 @@
+:root {
+    --vscode-editor-background: #1e1e1e;
+    --vscode-editor-foreground: #d4d4d4;
+    --vscode-sideBar-background: #252526;
+    --vscode-sideBar-foreground: #d4d4d4;
+    --vscode-titleBar-activeBackground: #333333;
+    --vscode-activityBar-background: #333333;
+    --vscode-activityBar-foreground: #d4d4d4;
+    --vscode-statusBar-background: #007acc;
+    --vscode-statusBar-foreground: #ffffff;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: var(--vscode-editor-background);
+    color: var(--vscode-editor-foreground);
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.activity-bar {
+    width: 48px;
+    background-color: var(--vscode-activityBar-background);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.activity-bar-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--vscode-activityBar-foreground);
+    cursor: pointer;
+}
+
+.activity-bar-icon:hover {
+    background-color: #2a2d2e;
+}
+
+.sidebar {
+    width: 300px;
+    background-color: var(--vscode-sideBar-background);
+    border-right: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #333;
+}
+
+.sidebar-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #cccccc;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-container {
+    flex: 1;
+    height: 100%;
+}
+
+.chat-container {
+    width: 300px;
+    border-left: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--vscode-sideBar-background);
+}
+
+.chat-header {
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: var(--vscode-editor-background);
+}
+
+.chat-input-container {
+    padding: 10px;
+    background-color: var(--vscode-sideBar-background);
+    border-top: 1px solid #333;
+}
+
+#chat-input {
+    width: 100%;
+    height: 60px;
+    background-color: #3c3c3c;
+    border: 1px solid #555;
+    color: var(--vscode-editor-foreground);
+    padding: 8px;
+    resize: none;
+    border-radius: 4px;
+    font-family: inherit;
+}
+
+#send-button {
+    margin-top: 8px;
+    padding: 6px 12px;
+    background-color: var(--vscode-statusBar-background);
+    color: var(--vscode-statusBar-foreground);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#send-button:hover {
+    background-color: #1177bb;
+}
+
+.status-bar {
+    height: 22px;
+    background-color: var(--vscode-statusBar-background);
+    color: var(--vscode-statusBar-foreground);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    font-size: 12px;
+}
+
+.message {
+    margin: 10px 0;
+    padding: 8px;
+    border-radius: 4px;
+    background-color: #2d2d2d;
+}
+
+.user-message {
+    background-color: #264f78;
+}
+
+.ai-message {
+    background-color: #3c3c3c;
+} 
