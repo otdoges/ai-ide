@@ -25,8 +25,8 @@ A powerful desktop IDE built with Electron that mimics VSCodium's look and feel 
 
 1. Clone this repository:
    ```
-   git clone https://github.com/yourusername/vscodium-style-ide.git
-   cd vscodium-style-ide
+   git clone https://github.com/otdoges/ai-ide.git
+   cd ai-ide
    ```
 
 2. Install dependencies using pnpm:
