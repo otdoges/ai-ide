@@ -1,95 +1,80 @@
-# VSCodium-style IDE with AI
+# Codium AI IDE
 
-A powerful desktop IDE built with Electron that mimics VSCodium's look and feel while integrating AI assistant capabilities.
-
-![VSCodium-style IDE with AI Screenshot](screenshot.png)
+VSCodium-like IDE with integrated AI assistant
 
 ## Features
 
-- **Modern VSCode-like UI**: Familiar interface with activity bar, file explorer, editor, and panels
-- **Monaco Editor**: The same editor that powers VS Code, with syntax highlighting, code completion, and more
-- **AI Assistant**: Built-in AI chat powered by GitHub's AI models for coding help
-- **File Management**: Open, edit, and save files with ease
-- **Terminal Integration**: Built-in terminal for running commands
-- **Command Palette**: Quick access to commands and settings
-- **Customizable**: Themes, settings, and more to make it your own
+- Modern, VSCodium-like interface
+- Built-in AI coding assistant
+- File explorer and editor
+- Syntax highlighting with Monaco Editor
+- Customizable themes
+- Cross-platform (Windows, macOS, Linux)
 
-## Getting Started
+## Installation
 
 ### Prerequisites
 
-- Node.js 18.x or later
-- pnpm 8.x or later
+- Node.js 18.0 or later
+- pnpm 8.0 or later
 
-### Installation
+### Windows
 
-1. Clone this repository:
-   ```
-   git clone https://github.com/otdoges/ai-ide.git
-   cd ai-ide
-   ```
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/codium-ai-ide.git
+cd codium-ai-ide
 
-2. Install dependencies using pnpm:
-   ```
-   pnpm install
-   ```
-
-3. Set up environment variables:
-   Create a `.env` file in the root directory and add your GitHub token:
-   ```
-   GITHUB_TOKEN=your_github_token_here
-   ```
-
-4. Start the application:
-   ```
-   pnpm start
-   ```
-
-### Build
-
-To build the application for your platform:
+# Run the installation script
+.\scripts\install.bat
 ```
-pnpm build
+
+### macOS/Linux
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/codium-ai-ide.git
+cd codium-ai-ide
+
+# Make the script executable
+chmod +x scripts/install.sh
+
+# Run the installation script
+./scripts/install.sh
+```
+
+## Running the Application
+
+```bash
+pnpm start
 ```
 
 ## Development
 
-### Project Structure
+```bash
+# Run in development mode with hot reload
+pnpm dev
+```
 
-- `main.js` - Main Electron process
-- `renderer.js` - Renderer process
-- `preload.js` - Preload script for secure IPC
-- `index.html` - Main UI
-- `styles.css` - CSS styles
-- `.env` - Environment variables (not committed to source control)
+## Building for Distribution
 
-### Development Scripts
+```bash
+pnpm build
+```
 
-- `pnpm start` - Run the application
-- `pnpm dev` - Run the application in development mode
-- `pnpm build` - Build the application
+This will create distributables in the `dist` directory.
 
-## Using the AI Assistant
+## Configuration
 
-The AI assistant uses GitHub's AI models to help with coding questions. To use it:
+Create a `.env` file in the root directory with the following variables:
 
-1. Click on the AI Assistant icon in the activity bar
-2. Type your question in the chat input
-3. Press Enter or click Send
-
-The AI assistant can help with:
-- Answering coding questions
-- Explaining code
-- Suggesting code solutions
-- Debugging issues
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+```
+OPENAI_API_KEY=your_openai_api_key
+```
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+MIT
 
 ## Acknowledgments
 
