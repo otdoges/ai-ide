@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>AI-Powered IDE</title>
+    <title>VSCodium-style IDE with AI</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="node_modules/@vscode/codicons/dist/codicon.css">
     <script src="node_modules/monaco-editor/min/vs/loader.js"></script>
@@ -11,7 +11,7 @@
 <body>
     <div class="container">
         <div class="activity-bar">
-            <div class="activity-bar-icon" title="Explorer">
+            <div class="activity-bar-icon active" title="Explorer">
                 <span class="codicon codicon-files"></span>
             </div>
             <div class="activity-bar-icon" title="Search">
@@ -23,6 +23,9 @@
             <div class="activity-bar-icon" title="Run and Debug">
                 <span class="codicon codicon-debug"></span>
             </div>
+            <div class="activity-bar-icon" title="Extensions">
+                <span class="codicon codicon-extensions"></span>
+            </div>
             <div class="activity-bar-icon" title="AI Assistant">
                 <span class="codicon codicon-light-bulb"></span>
             </div>
@@ -32,25 +35,47 @@
             <div class="sidebar-header">
                 <span class="sidebar-title">Explorer</span>
                 <div class="sidebar-actions">
-                    <span class="codicon codicon-new-file"></span>
-                    <span class="codicon codicon-new-folder"></span>
-                    <span class="codicon codicon-refresh"></span>
+                    <span class="codicon codicon-new-file" title="New File"></span>
+                    <span class="codicon codicon-new-folder" title="New Folder"></span>
+                    <span class="codicon codicon-refresh" title="Refresh"></span>
+                    <span class="codicon codicon-collapse-all" title="Collapse Folders"></span>
                 </div>
             </div>
             <div id="file-tree"></div>
         </div>
         
         <div class="main-content">
+            <div class="editor-tabs">
+                <div class="editor-tab active">
+                    <span class="codicon codicon-code"></span>
+                    <span class="tab-title">untitled.js</span>
+                    <span class="codicon codicon-close editor-tab-close"></span>
+                </div>
+            </div>
+            
             <div class="editor-container" id="editor-container"></div>
+            
+            <div class="terminal-container" id="terminal-container">
+                <div class="terminal-output"></div>
+                <div class="terminal-input-line">
+                    <span class="terminal-prompt">$</span>
+                    <input type="text" class="terminal-input" placeholder="Type commands here...">
+                </div>
+            </div>
             
             <div class="chat-container">
                 <div class="chat-header">
                     <span class="sidebar-title">AI Assistant</span>
                     <div class="chat-actions">
-                        <span class="codicon codicon-clear-all"></span>
+                        <span class="codicon codicon-clear-all" title="Clear Chat"></span>
+                        <span class="codicon codicon-close" title="Close Panel"></span>
                     </div>
                 </div>
-                <div class="chat-messages" id="chat-messages"></div>
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message ai-message">
+                        <p>Hello! I'm your AI assistant. How can I help you with your code today?</p>
+                    </div>
+                </div>
                 <div class="chat-input-container">
                     <textarea id="chat-input" placeholder="Ask AI anything..."></textarea>
                     <button id="send-button">Send</button>
@@ -58,9 +83,22 @@
             </div>
         </div>
     </div>
+    
     <div class="status-bar">
         <span>Ready</span>
+        <div class="status-bar-right">
+            <span class="status-item">JavaScript</span>
+            <span class="status-item">UTF-8</span>
+            <span class="status-item">Spaces: 2</span>
+            <span class="status-item">Ln 1, Col 1</span>
+        </div>
     </div>
+    
+    <div class="command-palette">
+        <input type="text" class="command-palette-input" placeholder="Type a command or search...">
+        <div class="command-palette-results"></div>
+    </div>
+    
     <script src="renderer.js"></script>
 </body>
 </html> 
