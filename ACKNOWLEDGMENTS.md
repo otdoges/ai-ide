@@ -55,6 +55,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 According to the VSCodium project: _"VSCodium is a community-driven, freely-licensed binary distribution of Microsoft's editor VS Code."_ The project maintains builds for Windows, Linux, and macOS, and has been instrumental in providing a more privacy-focused alternative to VS Code.
 
+
 ---
 
 *This file acknowledges all who have contributed to making this project possible. If you believe you should be listed here but are not, please let us know so we can correct the oversight.* 
