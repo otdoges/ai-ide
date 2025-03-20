@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="styles/terminal.css">
     <link rel="stylesheet" href="styles/minimap.css">
     <link rel="stylesheet" href="styles/breadcrumbs.css">
+    <link rel="stylesheet" href="styles/chat.css">
     <link rel="stylesheet" href="../../node_modules/@vscode/codicons/dist/codicon.css">
     <script src="../../node_modules/monaco-editor/min/vs/loader.js"></script>
     <script src="../../node_modules/split.js/dist/split.min.js"></script>
@@ -155,6 +156,9 @@
             </div>
         </div>
         <div class="status-right">
+            <div class="status-item" id="fullscreen-toggle" title="Toggle Full Screen (F11)">
+                <i class="codicon codicon-screen-full"></i>
+            </div>
             <div class="status-item">
                 <span>Ln 1, Col 1</span>
             </div>
@@ -180,5 +184,8 @@
     <script src="scripts/minimap.js"></script>
     <script src="scripts/breadcrumbs.js"></script>
     <script src="scripts/permissions.js"></script>
+    <script src="scripts/settings.js"></script>
+    <script src="scripts/chat.js"></script>
+    <script src="scripts/fullscreen.js"></script>
 </body>
 </html> 
