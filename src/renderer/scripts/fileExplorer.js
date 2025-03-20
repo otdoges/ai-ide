@@ -661,20 +661,8 @@ class FileExplorer {
       parentPath = this.selectedItem.dataset.path;
     }
     
-    // Prompt for file name
-    const fileName = prompt('Enter file name:', 'new-file.js');
-    if (!fileName) return;
-    
-    // Create file
-    window.electronAPI.createFile(parentPath, fileName)
-      .then(() => {
-        this.refreshFileExplorer();
-        this.showNotification(`Created file: ${fileName}`, 'success');
-      })
-      .catch(error => {
-        console.error('Failed to create file:', error);
-        this.showNotification('Failed to create file', 'error');
-      });
+    // Show file creation dialog
+    this.showFileCreationDialog('file', parentPath);
   }
 
   /**
@@ -686,20 +674,216 @@ class FileExplorer {
       parentPath = this.selectedItem.dataset.path;
     }
     
-    // Prompt for folder name
-    const folderName = prompt('Enter folder name:', 'new-folder');
-    if (!folderName) return;
+    // Show folder creation dialog
+    this.showFileCreationDialog('folder', parentPath);
+  }
+
+  /**
+   * Show file/folder creation dialog
+   */
+  showFileCreationDialog(type, parentPath) {
+    // Create dialog container
+    const dialog = document.createElement('div');
+    dialog.classList.add('file-creation-dialog');
     
-    // Create folder
-    window.electronAPI.createFolder(parentPath, folderName)
-      .then(() => {
-        this.refreshFileExplorer();
-        this.showNotification(`Created folder: ${folderName}`, 'success');
-      })
-      .catch(error => {
-        console.error('Failed to create folder:', error);
-        this.showNotification('Failed to create folder', 'error');
+    // Create dialog content
+    const content = document.createElement('div');
+    content.classList.add('file-creation-dialog-content');
+    
+    // Create dialog header
+    const header = document.createElement('div');
+    header.classList.add('file-creation-dialog-header');
+    
+    const title = document.createElement('div');
+    title.classList.add('file-creation-dialog-title');
+    title.textContent = type === 'file' ? 'Create New File' : 'Create New Folder';
+    
+    const closeBtn = document.createElement('div');
+    closeBtn.classList.add('file-creation-dialog-close');
+    closeBtn.innerHTML = '<i class="codicon codicon-close"></i>';
+    closeBtn.addEventListener('click', () => dialog.remove());
+    
+    header.appendChild(title);
+    header.appendChild(closeBtn);
+    
+    // Create dialog body
+    const body = document.createElement('div');
+    body.classList.add('file-creation-dialog-body');
+    
+    // Create form
+    const form = document.createElement('div');
+    form.classList.add('file-creation-dialog-form');
+    
+    // If creating a file, show templates
+    if (type === 'file') {
+      const templates = document.createElement('div');
+      templates.classList.add('file-creation-dialog-templates');
+      
+      // Common file templates
+      const fileTemplates = [
+        { icon: 'html', label: 'HTML', extension: '.html' },
+        { icon: 'css', label: 'CSS', extension: '.css' },
+        { icon: 'javascript', label: 'JavaScript', extension: '.js' },
+        { icon: 'json', label: 'JSON', extension: '.json' },
+        { icon: 'markdown', label: 'Markdown', extension: '.md' },
+        { icon: 'typescript', label: 'TypeScript', extension: '.ts' },
+        { icon: 'react', label: 'React', extension: '.jsx' },
+        { icon: 'file-code', label: 'Text', extension: '.txt' }
+      ];
+      
+      let selectedTemplate = null;
+      
+      fileTemplates.forEach(template => {
+        const templateEl = document.createElement('div');
+        templateEl.classList.add('file-creation-dialog-template');
+        templateEl.dataset.extension = template.extension;
+        
+        const iconEl = document.createElement('div');
+        iconEl.classList.add('file-creation-dialog-template-icon');
+        iconEl.innerHTML = `<i class="codicon codicon-${template.icon}"></i>`;
+        
+        const labelEl = document.createElement('div');
+        labelEl.classList.add('file-creation-dialog-template-label');
+        labelEl.textContent = template.label;
+        
+        templateEl.appendChild(iconEl);
+        templateEl.appendChild(labelEl);
+        
+        // Template click handler
+        templateEl.addEventListener('click', () => {
+          // Remove selected class from previous template
+          if (selectedTemplate) {
+            selectedTemplate.classList.remove('selected');
+          }
+          
+          // Add selected class to this template
+          templateEl.classList.add('selected');
+          selectedTemplate = templateEl;
+          
+          // Update filename input with extension
+          const filenameInput = form.querySelector('.file-creation-dialog-input');
+          const currentName = filenameInput.value;
+          const baseName = currentName.includes('.') ? 
+            currentName.substring(0, currentName.lastIndexOf('.')) : 
+            currentName;
+            
+          filenameInput.value = baseName + template.extension;
+        });
+        
+        templates.appendChild(templateEl);
       });
+      
+      form.appendChild(templates);
+    }
+    
+    // Create input group
+    const inputGroup = document.createElement('div');
+    inputGroup.classList.add('file-creation-dialog-input-group');
+    
+    const label = document.createElement('label');
+    label.classList.add('file-creation-dialog-label');
+    label.textContent = type === 'file' ? 'File name:' : 'Folder name:';
+    
+    const input = document.createElement('input');
+    input.classList.add('file-creation-dialog-input');
+    input.type = 'text';
+    input.value = type === 'file' ? 'new-file.js' : 'new-folder';
+    input.select();
+    
+    inputGroup.appendChild(label);
+    inputGroup.appendChild(input);
+    
+    // Create location group
+    const locationGroup = document.createElement('div');
+    locationGroup.classList.add('file-creation-dialog-input-group');
+    
+    const locationLabel = document.createElement('label');
+    locationLabel.classList.add('file-creation-dialog-label');
+    locationLabel.textContent = 'Location:';
+    
+    const locationText = document.createElement('div');
+    locationText.textContent = parentPath;
+    locationText.style.fontSize = '13px';
+    locationText.style.padding = '6px 0';
+    
+    locationGroup.appendChild(locationLabel);
+    locationGroup.appendChild(locationText);
+    
+    // Create buttons
+    const buttons = document.createElement('div');
+    buttons.classList.add('file-creation-dialog-buttons');
+    
+    const cancelBtn = document.createElement('button');
+    cancelBtn.classList.add('file-creation-dialog-button', 'file-creation-dialog-button-cancel');
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.addEventListener('click', () => dialog.remove());
+    
+    const createBtn = document.createElement('button');
+    createBtn.classList.add('file-creation-dialog-button', 'file-creation-dialog-button-create');
+    createBtn.textContent = type === 'file' ? 'Create File' : 'Create Folder';
+    createBtn.addEventListener('click', () => {
+      const name = input.value.trim();
+      if (!name) return;
+      
+      if (type === 'file') {
+        // Create file
+        window.electronAPI.createFile(parentPath, name)
+          .then(() => {
+            this.refreshFileExplorer();
+            this.showNotification(`Created file: ${name}`, 'success');
+            dialog.remove();
+          })
+          .catch(error => {
+            console.error('Failed to create file:', error);
+            this.showNotification('Failed to create file', 'error');
+          });
+      } else {
+        // Create folder
+        window.electronAPI.createFolder(parentPath, name)
+          .then(() => {
+            this.refreshFileExplorer();
+            this.showNotification(`Created folder: ${name}`, 'success');
+            dialog.remove();
+          })
+          .catch(error => {
+            console.error('Failed to create folder:', error);
+            this.showNotification('Failed to create folder', 'error');
+          });
+      }
+    });
+    
+    // Enter key should trigger create
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        createBtn.click();
+      } else if (e.key === 'Escape') {
+        cancelBtn.click();
+      }
+    });
+    
+    buttons.appendChild(cancelBtn);
+    buttons.appendChild(createBtn);
+    
+    // Assemble the form
+    form.appendChild(inputGroup);
+    form.appendChild(locationGroup);
+    form.appendChild(buttons);
+    
+    body.appendChild(form);
+    
+    // Assemble the dialog
+    content.appendChild(header);
+    content.appendChild(body);
+    dialog.appendChild(content);
+    
+    // Add to document
+    document.body.appendChild(dialog);
+    
+    // Focus input
+    setTimeout(() => {
+      input.focus();
+      input.select();
+    }, 0);
   }
 
   /**
