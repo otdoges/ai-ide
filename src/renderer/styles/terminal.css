@@ -1,36 +1,46 @@
-/* Terminal styling based on VSCodium's integrated terminal */
+/* Terminal styling inspired by VSCodium */
 .terminal-container {
-  background-color: var(--terminal-background, var(--bg-primary));
-  color: var(--terminal-foreground, var(--fg-primary));
-  font-family: 'Consolas', 'Courier New', monospace;
-  font-size: 14px;
-  line-height: 1.5;
-  padding: 0;
+  position: relative;
+  width: 100%;
+  height: 0;
+  min-height: 0;
   overflow: hidden;
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  height: 100%;
-  border-top: 1px solid var(--border-color);
-  position: relative;
+  transition: height 0.3s ease;
+  z-index: 10;
+}
+
+.terminal-container.maximized {
+  height: calc(100vh - 50px) !important; /* Adjust based on status bar height */
+}
+
+.terminal-resize-handle {
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  cursor: ns-resize;
+  z-index: 11;
 }
 
 .terminal-header {
   display: flex;
   align-items: center;
-  background-color: var(--bg-secondary);
-  padding: 3px 8px;
-  height: 28px;
+  height: 30px;
+  padding: 0 10px;
+  background-color: var(--bg-primary);
   border-bottom: 1px solid var(--border-color);
-  user-select: none;
 }
 
 .terminal-tabs {
   display: flex;
   overflow-x: auto;
-  overflow-y: hidden;
-  height: 100%;
   flex-grow: 1;
-  scrollbar-width: thin;
+  height: 100%;
 }
 
 .terminal-tabs::-webkit-scrollbar {
@@ -39,307 +49,288 @@
 
 .terminal-tabs::-webkit-scrollbar-thumb {
   background-color: var(--scrollbar-thumb);
+  border-radius: 2px;
 }
 
 .terminal-tab {
   display: flex;
   align-items: center;
-  padding: 0 8px;
+  padding: 0 10px;
   height: 100%;
-  border-right: 1px solid transparent;
-  cursor: pointer;
-  white-space: nowrap;
   min-width: 100px;
-  max-width: 150px;
-  opacity: 0.7;
-  transition: opacity 0.2s ease-in-out;
+  max-width: 200px;
+  background-color: var(--bg-secondary);
+  color: var(--fg-secondary);
+  border-right: 1px solid var(--border-color);
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
   position: relative;
-}
-
-.terminal-tab:hover {
-  opacity: 0.9;
+  transition: background-color 0.1s ease;
 }
 
 .terminal-tab.active {
-  opacity: 1;
+  background-color: var(--bg-tertiary);
   color: var(--fg-primary);
-  border-top: 1px solid var(--accent-color);
-  background-color: var(--terminal-background, var(--bg-primary));
 }
 
-.terminal-tab-icon {
-  margin-right: 5px;
-  font-size: 14px;
-}
-
-.terminal-tab-title {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  flex-grow: 1;
+.terminal-tab:hover {
+  background-color: var(--bg-hover);
 }
 
 .terminal-tab-close {
-  margin-left: 5px;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-}
-
-.terminal-tab:hover .terminal-tab-close,
-.terminal-tab.active .terminal-tab-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  margin-left: 8px;
   opacity: 0.7;
+  transition: opacity 0.1s ease, background-color 0.1s ease;
 }
 
 .terminal-tab-close:hover {
-  opacity: 1 !important;
+  background-color: rgba(127, 127, 127, 0.3);
+  opacity: 1;
 }
 
-.terminal-actions {
-  display: flex;
-  align-items: center;
-}
-
-.terminal-action {
+.terminal-new-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 24px;
   height: 24px;
-  margin-left: 4px;
   border-radius: 3px;
+  margin-left: 4px;
+  background: transparent;
+  border: none;
+  color: var(--fg-secondary);
   cursor: pointer;
-  opacity: 0.7;
-  transition: opacity 0.2s ease, background-color 0.2s ease;
+  transition: background-color 0.1s ease;
 }
 
-.terminal-action:hover {
-  opacity: 1;
+.terminal-new-btn:hover {
   background-color: var(--bg-hover);
+  color: var(--fg-primary);
+}
+
+.terminal-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.terminal-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  margin-left: 4px;
+  background: transparent;
+  border: none;
+  color: var(--fg-secondary);
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+}
+
+.terminal-actions button:hover {
+  background-color: var(--bg-hover);
+  color: var(--fg-primary);
 }
 
 .terminal-content {
-  flex-grow: 1;
-  overflow: auto;
-  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  background-color: var(--terminal-bg, #1e1e1e);
+  position: relative;
+}
+
+.terminal-instance {
+  display: none;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 5px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: var(--terminal-fg, #cccccc);
+}
+
+.terminal-output {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 8px;
+}
+
+.terminal-output::-webkit-scrollbar {
+  width: 10px;
+}
+
+.terminal-output::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 5px;
+  border: 3px solid var(--terminal-bg, #1e1e1e);
+}
+
+.terminal-line {
+  min-height: 18px;
+  padding: 0 5px;
   white-space: pre-wrap;
   word-break: break-all;
 }
 
-.terminal-output {
-  width: 100%;
-  overflow-y: auto;
-  flex-grow: 1;
-  padding: 8px;
-}
-
-.terminal-output-line {
-  width: 100%;
-  white-space: pre-wrap;
-  line-height: 1.5;
-  animation: fadeIn 0.1s ease-in-out;
-}
-
-.terminal-output-line .error {
-  color: var(--error-color);
-}
-
-.terminal-output-line .success {
-  color: var(--success-color);
-}
-
-.terminal-output-line .warning {
-  color: var(--warning-color);
-}
-
-.terminal-input-line {
+.terminal-prompt-container {
   display: flex;
-  padding: 4px 8px;
-  width: 100%;
   align-items: center;
-  border-top: 1px solid var(--border-color);
-  background-color: var(--bg-input);
+  padding: 5px;
 }
 
 .terminal-prompt {
-  color: var(--accent-color);
-  margin-right: 8px;
-  font-weight: bold;
+  color: var(--terminal-prompt-color, #3aa5ff);
+  padding-right: 5px;
   user-select: none;
 }
 
 .terminal-input {
+  flex: 1;
   background: transparent;
   border: none;
-  color: var(--fg-primary);
-  font-family: 'Consolas', 'Courier New', monospace;
-  font-size: 14px;
-  flex-grow: 1;
   outline: none;
-  padding: 4px 0;
+  color: var(--terminal-fg, #cccccc);
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 13px;
+  padding: 0;
+  caret-color: var(--cursor-color, #ffffff);
 }
 
-.terminal-input::placeholder {
-  color: var(--fg-secondary);
-  opacity: 0.5;
+/* Command success/error styling */
+.terminal-line.success {
+  color: var(--terminal-success, #89d185);
 }
 
-/* Terminal resize handle */
-.terminal-resize-handle {
-  position: absolute;
-  top: -5px;
-  left: 0;
-  width: 100%;
-  height: 10px;
-  cursor: ns-resize;
-  background: transparent;
-  z-index: 10;
+.terminal-line.error {
+  color: var(--terminal-error, #f48771);
 }
 
-.terminal-resize-handle::after {
-  content: '';
-  display: block;
-  width: 40px;
-  height: 4px;
-  background-color: var(--border-color);
-  border-radius: 2px;
-  position: absolute;
-  top: 3px;
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 0;
-  transition: opacity 0.2s ease;
+.terminal-line.warning {
+  color: var(--terminal-warning, #cca700);
 }
 
-.terminal-resize-handle:hover::after {
-  opacity: 0.7;
-}
-
-.terminal-resize-handle:active::after {
-  opacity: 1;
-}
-
-/* Command history dropdown */
-.terminal-history {
-  position: absolute;
-  bottom: 100%;
-  left: 20px;
-  right: 20px;
-  max-height: 200px;
-  overflow-y: auto;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  z-index: 100;
-  display: none;
-}
-
-.terminal-history.visible {
-  display: block;
-  animation: slideUp 0.2s ease-in-out;
-}
-
-.terminal-history-item {
-  padding: 6px 10px;
-  cursor: pointer;
-  user-select: none;
-  transition: background-color 0.1s ease;
-}
-
-.terminal-history-item:hover,
-.terminal-history-item.selected {
-  background-color: var(--bg-hover);
-}
-
-/* Terminal animations */
-@keyframes terminalFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes terminalBlink {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
-
-.terminal-cursor {
-  display: inline-block;
-  width: 8px;
-  height: 16px;
-  background-color: var(--fg-primary);
-  margin-left: 2px;
-  vertical-align: middle;
-  animation: terminalBlink 1s step-end infinite;
+.terminal-line.info {
+  color: var(--terminal-info, #3794ff);
 }
 
 /* Terminal quick commands */
 .terminal-quick-commands {
-  position: absolute;
-  bottom: 100%;
-  right: 0;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-bottom: none;
-  border-radius: 4px 4px 0 0;
   display: flex;
-  transform: translateY(1px);
+  align-items: center;
+  padding: 5px;
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  overflow-x: auto;
 }
 
 .terminal-quick-command {
-  padding: 4px 8px;
-  cursor: pointer;
+  padding: 3px 8px;
+  margin-right: 5px;
+  background-color: var(--bg-tertiary);
+  color: var(--fg-secondary);
+  border-radius: 3px;
   font-size: 12px;
-  border-right: 1px solid var(--border-color);
-  opacity: 0.7;
-  transition: opacity 0.2s ease, background-color 0.2s ease;
-}
-
-.terminal-quick-command:last-child {
-  border-right: none;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: background-color 0.1s ease;
 }
 
 .terminal-quick-command:hover {
-  opacity: 1;
   background-color: var(--bg-hover);
+  color: var(--fg-primary);
 }
 
-/* Split terminal support */
-.terminal-split {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
+/* Terminal animations */
+.terminal-container {
+  animation-fill-mode: forwards;
 }
 
-.terminal-split-panel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border-right: 1px solid var(--border-color);
+.terminal-container.animating-in {
+  animation: terminal-slide-in 0.3s ease;
 }
 
-.terminal-split-panel:last-child {
-  border-right: none;
+.terminal-container.animating-out {
+  animation: terminal-slide-out 0.3s ease;
 }
 
-.terminal-split-handle {
-  width: 4px;
-  background-color: var(--bg-primary);
-  cursor: col-resize;
-  transition: background-color 0.2s ease;
+@keyframes terminal-slide-in {
+  0% { height: 0; }
+  100% { height: var(--terminal-height, 200px); }
 }
 
-.terminal-split-handle:hover,
-.terminal-split-handle:active {
-  background-color: var(--accent-color);
+@keyframes terminal-slide-out {
+  0% { height: var(--terminal-height, 200px); }
+  100% { height: 0; }
+}
+
+/* Theme-specific terminal colors */
+[data-theme="dark"] {
+  --terminal-bg: #1e1e1e;
+  --terminal-fg: #cccccc;
+  --terminal-prompt-color: #3aa5ff;
+  --terminal-success: #89d185;
+  --terminal-error: #f48771;
+  --terminal-warning: #cca700;
+  --terminal-info: #3794ff;
+  --cursor-color: #ffffff;
+}
+
+[data-theme="light"] {
+  --terminal-bg: #ffffff;
+  --terminal-fg: #333333;
+  --terminal-prompt-color: #0066cc;
+  --terminal-success: #008000;
+  --terminal-error: #e51400;
+  --terminal-warning: #a65b00;
+  --terminal-info: #0066cc;
+  --cursor-color: #000000;
+}
+
+[data-theme="high-contrast"] {
+  --terminal-bg: #000000;
+  --terminal-fg: #ffffff;
+  --terminal-prompt-color: #3aa5ff;
+  --terminal-success: #89d185;
+  --terminal-error: #f48771;
+  --terminal-warning: #cca700;
+  --terminal-info: #3794ff;
+  --cursor-color: #ffffff;
+}
+
+/* Body class for when terminal is being resized */
+body.resizing-terminal {
+  cursor: ns-resize;
+  user-select: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .terminal-tab {
+    min-width: 80px;
+    padding: 0 5px;
+  }
+  
+  .terminal-new-btn,
+  .terminal-actions button {
+    width: 20px;
+    height: 20px;
+  }
 } 

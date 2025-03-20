@@ -1,0 +1,148 @@
+/* Minimap styling for the editor, inspired by VSCodium */
+.minimap-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 5;
+  background-color: var(--bg-primary);
+  box-shadow: -1px 0 0 0 var(--border-color);
+  transition: width 0.2s ease-out;
+  overflow: hidden;
+}
+
+.minimap-container.collapsed {
+  width: 20px !important;
+}
+
+.minimap-canvas {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  pointer-events: none;
+}
+
+.minimap-viewport {
+  position: absolute;
+  right: 0;
+  width: 100%;
+  background-color: rgba(127, 127, 127, 0.1);
+  border: 1px solid rgba(127, 127, 127, 0.2);
+  border-right: none;
+  z-index: 2;
+  pointer-events: all;
+  cursor: grab;
+}
+
+.minimap-container.dragging .minimap-viewport {
+  cursor: grabbing;
+  background-color: rgba(127, 127, 127, 0.15);
+}
+
+.minimap-slider {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  background-color: transparent;
+  cursor: pointer;
+  z-index: 3;
+  pointer-events: all;
+}
+
+.minimap-slider::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 6px;
+  width: 8px;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.minimap-slider:hover::after {
+  opacity: 0.2;
+  background-color: var(--fg-secondary);
+}
+
+.minimap-slider.collapsed::before {
+  content: '⟩';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  color: var(--fg-secondary);
+  opacity: 0.7;
+}
+
+.minimap-slider:not(.collapsed)::before {
+  content: '⟨';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  color: var(--fg-secondary);
+  opacity: 0.7;
+}
+
+/* Animation for collapsed/expanded state */
+.minimap-container, 
+.minimap-canvas, 
+.minimap-viewport, 
+.minimap-slider {
+  transition: width 0.2s ease, opacity 0.2s ease;
+}
+
+/* Hover effect */
+.minimap-container:hover .minimap-viewport {
+  background-color: rgba(127, 127, 127, 0.15);
+}
+
+/* Active drag effect */
+.minimap-viewport:active {
+  background-color: rgba(127, 127, 127, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .minimap-container {
+    width: 60px !important;
+  }
+  
+  .minimap-container.collapsed {
+    width: 16px !important;
+  }
+}
+
+/* Theme-specific adjustments */
+[data-theme="dark"] .minimap-viewport {
+  background-color: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] .minimap-viewport {
+  background-color: rgba(0, 0, 0, 0.07);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="high-contrast"] .minimap-viewport {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  border-width: 2px;
+}
+
+/* Animation when changing scroll position */
+.minimap-viewport {
+  transition: top 0.1s ease-out;
+}
+
+.minimap-container.dragging .minimap-viewport {
+  transition: none; /* Disable transition during drag */
+} 

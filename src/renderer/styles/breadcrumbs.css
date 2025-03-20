@@ -1,0 +1,233 @@
+/* Breadcrumbs Navigation styling inspired by VSCodium */
+.breadcrumbs-container {
+  display: flex;
+  height: 28px;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+  z-index: 10;
+}
+
+/* Responsive button (visible in compact mode) */
+.breadcrumbs-button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.breadcrumbs-button:hover {
+  opacity: 1;
+  background-color: var(--bg-hover);
+}
+
+/* Main content */
+.breadcrumbs-content {
+  display: flex;
+  flex-grow: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none; /* Firefox */
+  padding-left: 6px;
+}
+
+.breadcrumbs-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* Path and symbols sections */
+.breadcrumbs-path,
+.breadcrumbs-symbols {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+/* Visual separator between path and symbols */
+.breadcrumb-path-symbol-separator {
+  display: block;
+  width: 1px;
+  height: 16px;
+  background-color: var(--border-color);
+  margin: 0 8px;
+}
+
+/* Breadcrumb item styling */
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  opacity: 0.7;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.breadcrumb-item:hover {
+  opacity: 1;
+  background-color: var(--bg-hover);
+}
+
+/* Breadcrumb separator */
+.breadcrumb-separator {
+  display: flex;
+  align-items: center;
+  opacity: 0.5;
+  margin: 0 2px;
+  pointer-events: none;
+}
+
+/* Icons in breadcrumbs */
+.breadcrumb-icon {
+  display: flex;
+  align-items: center;
+  margin-right: 4px;
+  font-size: 14px;
+}
+
+/* Label text */
+.breadcrumb-label {
+  font-size: 13px;
+  color: var(--fg-primary);
+  margin-right: 2px;
+}
+
+/* Dropdown indicator */
+.breadcrumb-dropdown {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.breadcrumb-item:hover .breadcrumb-dropdown {
+  opacity: 1;
+}
+
+/* Dropdown menu */
+.breadcrumb-dropdown-menu {
+  position: absolute;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  min-width: 180px;
+  animation: fadeIn 0.1s ease-in-out;
+}
+
+/* Dropdown items */
+.breadcrumb-dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+}
+
+.breadcrumb-dropdown-item:hover {
+  background-color: var(--bg-hover);
+}
+
+.breadcrumb-dropdown-item.active {
+  background-color: var(--bg-selected);
+}
+
+/* Icons in dropdown */
+.breadcrumb-dropdown-icon {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+/* Dropdown item labels */
+.breadcrumb-dropdown-label {
+  font-size: 13px;
+  color: var(--fg-primary);
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Responsive compact mode */
+.breadcrumbs-container.compact .breadcrumbs-button {
+  display: flex;
+}
+
+.breadcrumbs-container.compact .breadcrumbs-content {
+  display: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Focus and keyboard navigation */
+.breadcrumbs-content:focus {
+  outline: none;
+}
+
+.breadcrumbs-content:focus-visible {
+  outline: 1px solid var(--accent-color);
+  outline-offset: -1px;
+}
+
+.breadcrumb-item.keyboard-focus {
+  background-color: var(--bg-hover);
+  position: relative;
+}
+
+.breadcrumb-item.keyboard-focus::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--accent-color);
+}
+
+/* Symbol-specific styles */
+.breadcrumb-item[data-symbol-type="class"] .breadcrumb-icon {
+  color: var(--symbol-color-class, #ee9d28);
+}
+
+.breadcrumb-item[data-symbol-type="method"] .breadcrumb-icon {
+  color: var(--symbol-color-method, #b180d7);
+}
+
+.breadcrumb-item[data-symbol-type="variable"] .breadcrumb-icon {
+  color: var(--symbol-color-variable, #75beff);
+}
+
+.breadcrumb-item[data-symbol-type="interface"] .breadcrumb-icon {
+  color: var(--symbol-color-interface, #75beff);
+}
+
+.breadcrumb-item[data-symbol-type="enum"] .breadcrumb-icon {
+  color: var(--symbol-color-enum, #75beff);
+}
+
+.breadcrumb-item[data-symbol-type="function"] .breadcrumb-icon {
+  color: var(--symbol-color-function, #b180d7);
+} 
