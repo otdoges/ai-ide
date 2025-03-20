@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   mode: 'development',
   entry: {
-    renderer: './renderer.js',
+    renderer: './src/renderer/renderer.js',
   },
   output: {
     filename: '[name].bundle.js',

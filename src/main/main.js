@@ -30,14 +30,14 @@ function createWindow() {
       contextIsolation: false,
       enableRemoteModule: true,
       webSecurity: false,
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, '../preload/preload.js')
     },
     title: 'VSCodium-style IDE with AI',
-    icon: path.join(__dirname, 'icons', 'icon.png')
+    icon: path.join(__dirname, '../../assets/icon.png')
   });
 
   // Load the index.html of the app.
-  mainWindow.loadFile('index.html');
+  mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
 
   // Open the DevTools in development mode
   if (process.argv.includes('--dev')) {
