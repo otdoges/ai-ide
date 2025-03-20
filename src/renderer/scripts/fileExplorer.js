@@ -892,25 +892,148 @@ class FileExplorer {
   renameItem(item) {
     const oldPath = item.dataset.path;
     const oldName = item.querySelector('span').textContent;
+    const type = item.dataset.type;
+
+    // Create dialog container
+    const dialog = document.createElement('div');
+    dialog.classList.add('file-creation-dialog');
     
-    // Prompt for new name
-    const newName = prompt('Enter new name:', oldName);
-    if (!newName || newName === oldName) return;
+    // Create dialog content
+    const content = document.createElement('div');
+    content.classList.add('file-creation-dialog-content');
+    
+    // Create dialog header
+    const header = document.createElement('div');
+    header.classList.add('file-creation-dialog-header');
+    
+    const title = document.createElement('div');
+    title.classList.add('file-creation-dialog-title');
+    title.textContent = `Rename ${type === 'folder' ? 'Folder' : 'File'}`;
+    
+    const closeBtn = document.createElement('div');
+    closeBtn.classList.add('file-creation-dialog-close');
+    closeBtn.innerHTML = '<i class="codicon codicon-close"></i>';
+    closeBtn.addEventListener('click', () => dialog.remove());
+    
+    header.appendChild(title);
+    header.appendChild(closeBtn);
+    
+    // Create dialog body
+    const body = document.createElement('div');
+    body.classList.add('file-creation-dialog-body');
+    
+    // Create form
+    const form = document.createElement('div');
+    form.classList.add('file-creation-dialog-form');
+    
+    // Create input group
+    const inputGroup = document.createElement('div');
+    inputGroup.classList.add('file-creation-dialog-input-group');
+    
+    const label = document.createElement('label');
+    label.classList.add('file-creation-dialog-label');
+    label.textContent = 'New name:';
+    
+    const input = document.createElement('input');
+    input.classList.add('file-creation-dialog-input');
+    input.type = 'text';
+    input.value = oldName;
+    
+    // Select filename without extension
+    if (type === 'file' && oldName.includes('.')) {
+      const lastDot = oldName.lastIndexOf('.');
+      input.setSelectionRange(0, lastDot);
+    } else {
+      input.select();
+    }
+    
+    inputGroup.appendChild(label);
+    inputGroup.appendChild(input);
+    
+    // Create location group
+    const locationGroup = document.createElement('div');
+    locationGroup.classList.add('file-creation-dialog-input-group');
+    
+    const locationLabel = document.createElement('label');
+    locationLabel.classList.add('file-creation-dialog-label');
+    locationLabel.textContent = 'Location:';
     
     // Get parent path
     const parentPath = oldPath.substring(0, oldPath.lastIndexOf('/'));
-    const newPath = `${parentPath}/${newName}`;
     
-    // Rename file/folder
-    window.electronAPI.renameItem(oldPath, newPath)
-      .then(() => {
-        this.refreshFileExplorer();
-        this.showNotification(`Renamed to: ${newName}`, 'success');
-      })
-      .catch(error => {
-        console.error('Failed to rename item:', error);
-        this.showNotification('Failed to rename item', 'error');
-      });
+    const locationText = document.createElement('div');
+    locationText.textContent = parentPath;
+    locationText.style.fontSize = '13px';
+    locationText.style.padding = '6px 0';
+    
+    locationGroup.appendChild(locationLabel);
+    locationGroup.appendChild(locationText);
+    
+    // Create buttons
+    const buttons = document.createElement('div');
+    buttons.classList.add('file-creation-dialog-buttons');
+    
+    const cancelBtn = document.createElement('button');
+    cancelBtn.classList.add('file-creation-dialog-button', 'file-creation-dialog-button-cancel');
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.addEventListener('click', () => dialog.remove());
+    
+    const renameBtn = document.createElement('button');
+    renameBtn.classList.add('file-creation-dialog-button', 'file-creation-dialog-button-create');
+    renameBtn.textContent = 'Rename';
+    renameBtn.addEventListener('click', () => {
+      const newName = input.value.trim();
+      if (!newName || newName === oldName) {
+        dialog.remove();
+        return;
+      }
+      
+      const newPath = `${parentPath}/${newName}`;
+      
+      // Rename file/folder
+      window.electronAPI.renameItem(oldPath, newPath)
+        .then(() => {
+          this.refreshFileExplorer();
+          this.showNotification(`Renamed to: ${newName}`, 'success');
+          dialog.remove();
+        })
+        .catch(error => {
+          console.error('Failed to rename item:', error);
+          this.showNotification('Failed to rename item', 'error');
+        });
+    });
+    
+    // Enter key should trigger rename
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        renameBtn.click();
+      } else if (e.key === 'Escape') {
+        cancelBtn.click();
+      }
+    });
+    
+    buttons.appendChild(cancelBtn);
+    buttons.appendChild(renameBtn);
+    
+    // Assemble the form
+    form.appendChild(inputGroup);
+    form.appendChild(locationGroup);
+    form.appendChild(buttons);
+    
+    body.appendChild(form);
+    
+    // Assemble the dialog
+    content.appendChild(header);
+    content.appendChild(body);
+    dialog.appendChild(content);
+    
+    // Add to document
+    document.body.appendChild(dialog);
+    
+    // Focus input
+    setTimeout(() => {
+      input.focus();
+    }, 0);
   }
 
   /**
