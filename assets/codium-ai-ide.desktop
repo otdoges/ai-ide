@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Codium AI IDE
+Comment=VSCodium-like IDE with integrated AI assistant
+Exec=/usr/local/bin/codium-ai-ide
+Icon=/usr/share/icons/hicolor/512x512/apps/codium-ai-ide.png
+Terminal=false
+Type=Application
+Categories=Development;IDE;
+StartupNotify=true
+StartupWMClass=codium-ai-ide 
