@@ -299,44 +299,23 @@ activityBarIcons.forEach((icon, index) => {
   });
 });
 
-// Initialize AI Chat functionality
-const token = process.env.GITHUB_TOKEN;
+// Import our AI service
+import aiService from './aiService.js';
 
+// Initialize AI Chat functionality
 async function sendMessage(message) {
   // Add user message to chat
   addMessageToChat('user', message);
 
   try {
-    // This import statement works with module bundling tools,
-    // but for direct browser usage, we need to load these modules differently
-    // or use global variables provided by including scripts in HTML
-    const ModelClient = await import("@azure-rest/ai-inference");
-    const { AzureKeyCredential } = await import("@azure/core-auth");
+    // Use our AI service
+    const response = await aiService.generateCompletion(message);
     
-    const client = ModelClient.default(
-      "https://models.inference.ai.azure.com",
-      new AzureKeyCredential(token)
-    );
-
-    const response = await client.path("/chat/completions").post({
-      body: {
-        messages: [
-          { role: "system", content: "You are an AI programming assistant in an IDE. Help with coding questions and provide clear, concise answers." },
-          { role: "user", content: message }
-        ],
-        model: "gpt-4o",
-        temperature: 0.7,
-        max_tokens: 4096,
-        top_p: 1
-      }
-    });
-
-    if (ModelClient.isUnexpected(response)) {
-      throw response.body.error;
+    if (response.success) {
+      addMessageToChat('ai', response.content);
+    } else {
+      throw new Error(response.content);
     }
-
-    const aiResponse = response.body.choices[0].message.content;
-    addMessageToChat('ai', aiResponse);
   } catch (err) {
     console.error('AI Chat error:', err);
     addMessageToChat('ai', `Error: ${err.message || 'Failed to connect to AI service'}`);
