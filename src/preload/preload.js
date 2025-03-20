@@ -31,27 +31,36 @@ contextBridge.exposeInMainWorld(
     
     // Path utilities
     pathBasename: (filePath) => path.basename(filePath),
+    pathDirname: (filePath) => path.dirname(filePath),
+    pathExtname: (filePath) => path.extname(filePath),
+    pathJoin: (...args) => path.join(...args),
     
     // UI operations
     toggleSidebar: (callback) => ipcRenderer.on('toggle-sidebar', callback),
+    toggleTerminal: (callback) => ipcRenderer.on('toggle-terminal', callback),
     toggleAIAssistant: (callback) => ipcRenderer.on('toggle-ai-assistant', callback),
     
-    // Settings
-    getSettings: () => {
-      // This could be fetched from main via IPC, but for simplicity, we'll define it here
-      return {
-        theme: 'dark',
-        fontSize: 14,
-        tabSize: 4
-      };
-    },
-    
-    // UI toggle actions
-    toggleTerminal: (callback) => ipcRenderer.on('menu-toggle-terminal', callback),
-    
     // Editor actions
-    find: (callback) => ipcRenderer.on('menu-find', callback),
-    replace: (callback) => ipcRenderer.on('menu-replace', callback),
+    find: (callback) => ipcRenderer.on('find', callback),
+    replace: (callback) => ipcRenderer.on('replace', callback),
+
+    // Theme operations
+    changeTheme: (callback) => ipcRenderer.on('change-theme', callback),
+    browseThemes: (callback) => ipcRenderer.on('browse-themes', callback),
+    getThemes: () => ipcRenderer.invoke('get-themes'),
+    installTheme: (theme) => ipcRenderer.invoke('install-theme', theme),
+    
+    // Extension operations
+    openExtensionsMarketplace: (callback) => ipcRenderer.on('open-extensions-marketplace', callback),
+    manageExtensions: (callback) => ipcRenderer.on('manage-extensions', callback),
+    installVSIX: (callback) => ipcRenderer.on('install-vsix', callback),
+    getExtensions: () => ipcRenderer.invoke('get-extensions'),
+    installExtension: (extension) => ipcRenderer.invoke('install-extension', extension),
+    uninstallExtension: (extensionId) => ipcRenderer.invoke('uninstall-extension', extensionId),
+    
+    // Settings
+    getSettings: () => ipcRenderer.invoke('get-settings'),
+    saveSettings: (settings) => ipcRenderer.invoke('save-settings', settings),
     
     // Basic information
     getOsInfo: () => ({
@@ -59,11 +68,6 @@ contextBridge.exposeInMainWorld(
       arch: os.arch(),
       version: os.release(),
       homedir: os.homedir()
-    }),
-    
-    // Path utilities
-    pathJoin: (...args) => path.join(...args),
-    pathDirname: (p) => path.dirname(p),
-    pathExtname: (p) => path.extname(p)
+    })
   }
 ); 

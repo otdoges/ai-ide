@@ -1,0 +1,280 @@
+/* Theme CSS Variables */
+
+/* ===== DARK THEME (Default) ===== */
+[data-theme="dark"] {
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #252526;
+  --bg-tertiary: #333333;
+  --bg-active: #37373d;
+  --bg-hover: #2a2d2e;
+  --bg-panel: #252526;
+  
+  --fg-primary: #d4d4d4;
+  --fg-secondary: #cccccc;
+  --fg-tertiary: #9e9e9e;
+  --fg-muted: #6a6a6a;
+  
+  --border-color: #474747;
+  --border-hover: #606060;
+  --border-active: #007fd4;
+  
+  --accent-color: #0e639c;
+  --accent-hover: #1177bb;
+  --accent-active: #2f95e0;
+  
+  --scroll-thumb: #424242;
+  --scroll-track: #1e1e1e;
+  
+  --tree-indent-guide: #8884;
+  --status-bar-bg: #007acc;
+  --activity-bar-bg: #333333;
+  --sidebar-bg: #252526;
+  --tab-bg: #2d2d2d;
+  --tab-active-bg: #1e1e1e;
+  
+  --editor-line-highlight: #2a2d2e;
+  --editor-selection: #264f78;
+  --editor-current-line: #282828;
+  --editor-ruler: #5a5a5a;
+  
+  --panel-bg: #1e1e1e;
+  --panel-border: #333333;
+  
+  --notification-bg: #1e1e1e;
+  --notification-info: #3794ff;
+  --notification-warning: #cca700;
+  --notification-error: #f14c4c;
+  
+  --shadow-color: rgba(0, 0, 0, 0.36);
+  
+  /* Animation durations */
+  --transition-fast: 100ms;
+  --transition-normal: 200ms;
+  --transition-slow: 300ms;
+}
+
+/* ===== LIGHT THEME ===== */
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f3f3f3;
+  --bg-tertiary: #ececec;
+  --bg-active: #e5e5e5;
+  --bg-hover: #f0f0f0;
+  --bg-panel: #f9f9f9;
+  
+  --fg-primary: #333333;
+  --fg-secondary: #4d4d4d;
+  --fg-tertiary: #616161;
+  --fg-muted: #a0a0a0;
+  
+  --border-color: #cecece;
+  --border-hover: #b1b1b1;
+  --border-active: #007acc;
+  
+  --accent-color: #0078d4;
+  --accent-hover: #006db3;
+  --accent-active: #005a9e;
+  
+  --scroll-thumb: #c1c1c1;
+  --scroll-track: #f5f5f5;
+  
+  --tree-indent-guide: #3334;
+  --status-bar-bg: #007acc;
+  --activity-bar-bg: #2c2c2c;
+  --sidebar-bg: #f3f3f3;
+  --tab-bg: #ececec;
+  --tab-active-bg: #ffffff;
+  
+  --editor-line-highlight: #f0f0f0;
+  --editor-selection: #add6ff;
+  --editor-current-line: #f2f2f2;
+  --editor-ruler: #d3d3d3;
+  
+  --panel-bg: #f3f3f3;
+  --panel-border: #e1e1e1;
+  
+  --notification-bg: #ffffff;
+  --notification-info: #0078d4;
+  --notification-warning: #dcad35;
+  --notification-error: #e51400;
+  
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  
+  /* Animation durations */
+  --transition-fast: 100ms;
+  --transition-normal: 200ms;
+  --transition-slow: 300ms;
+}
+
+/* ===== HIGH CONTRAST THEME ===== */
+[data-theme="high-contrast"] {
+  --bg-primary: #000000;
+  --bg-secondary: #0d0d0d;
+  --bg-tertiary: #1a1a1a;
+  --bg-active: #2c2c2c;
+  --bg-hover: #202020;
+  --bg-panel: #0d0d0d;
+  
+  --fg-primary: #ffffff;
+  --fg-secondary: #f0f0f0;
+  --fg-tertiary: #d8d8d8;
+  --fg-muted: #a6a6a6;
+  
+  --border-color: #6a6a6a;
+  --border-hover: #939393;
+  --border-active: #ffff00;
+  
+  --accent-color: #1aebff;
+  --accent-hover: #4dffff;
+  --accent-active: #66f3ff;
+  
+  --scroll-thumb: #767676;
+  --scroll-track: #0d0d0d;
+  
+  --tree-indent-guide: #fff4;
+  --status-bar-bg: #0063b1;
+  --activity-bar-bg: #0d0d0d;
+  --sidebar-bg: #0d0d0d;
+  --tab-bg: #0d0d0d;
+  --tab-active-bg: #000000;
+  
+  --editor-line-highlight: #1a1a1a;
+  --editor-selection: #5a5a5a;
+  --editor-current-line: #0e0e0e;
+  --editor-ruler: #ffffff;
+  
+  --panel-bg: #000000;
+  --panel-border: #6a6a6a;
+  
+  --notification-bg: #000000;
+  --notification-info: #1aebff;
+  --notification-warning: #ffff00;
+  --notification-error: #f48771;
+  
+  --shadow-color: rgba(255, 255, 255, 0.2);
+  
+  /* Animation durations */
+  --transition-fast: 100ms;
+  --transition-normal: 200ms;
+  --transition-slow: 300ms;
+}
+
+/* ===== ANIMATIONS ===== */
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Slide down animation */
+@keyframes slideDown {
+  from { 
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Slide up animation */
+@keyframes slideUp {
+  from { 
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Scale animation */
+@keyframes scaleIn {
+  from { 
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to { 
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Pulse animation for focus or attention */
+@keyframes pulse {
+  0% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(var(--accent-color-rgb), 0.4);
+  }
+  70% { 
+    transform: scale(1.02);
+    box-shadow: 0 0 0 10px rgba(var(--accent-color-rgb), 0);
+  }
+  100% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(var(--accent-color-rgb), 0);
+  }
+}
+
+/* Hover animations */
+.btn, .activity-bar-icon, .file-item, .tab {
+  transition: all var(--transition-normal) ease;
+}
+
+/* Transition settings for theme changes */
+* {
+  transition: background-color var(--transition-slow) ease,
+              color var(--transition-slow) ease,
+              border-color var(--transition-slow) ease,
+              box-shadow var(--transition-slow) ease;
+}
+
+/* Apply animations to UI elements */
+.sidebar, .panel {
+  animation: slideIn 0.2s ease-out;
+}
+
+.notification {
+  animation: slideDown 0.3s ease-out;
+}
+
+.dialog {
+  animation: scaleIn 0.2s ease-out;
+}
+
+/* Toast notification animation */
+.toast {
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Focus animation for input fields */
+input:focus, textarea:focus {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+/* Button hover and active states with animation */
+.btn {
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* Extension card hover animation */
+.extension-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.extension-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--shadow-color);
+} 
