@@ -62,6 +62,12 @@ contextBridge.exposeInMainWorld(
     getSettings: () => ipcRenderer.invoke('get-settings'),
     saveSettings: (settings) => ipcRenderer.invoke('save-settings', settings),
     
+    // Permissions
+    getFilePermissions: () => ipcRenderer.invoke('get-file-permissions'),
+    allowPath: (path) => ipcRenderer.invoke('allow-path', path),
+    denyPath: (path) => ipcRenderer.invoke('deny-path', path),
+    showPermissionsManager: (callback) => ipcRenderer.on('show-permissions-manager', callback),
+    
     // Basic information
     getOsInfo: () => ({
       platform: os.platform(),

@@ -14,7 +14,11 @@ const store = new Store({
     extensions: [],
     fontSize: 14,
     recentFiles: [],
-    recentFolders: []
+    recentFolders: [],
+    filePermissions: {
+      allowedPaths: [],
+      deniedPaths: []
+    }
   }
 });
 
@@ -41,6 +45,55 @@ const themesStore = new Store({
 
 // Keep a global reference of the window object to avoid garbage collection
 let mainWindow;
+
+// File permissions system
+const filePermissions = {
+  allowedPaths: [],
+  deniedPaths: [],
+  
+  // Check if a path is allowed
+  isPathAllowed(filePath) {
+    // Always allow paths that have been explicitly approved
+    if (this.allowedPaths.some(allowedPath => filePath.startsWith(allowedPath))) {
+      return true;
+    }
+    
+    // Deny paths that have been explicitly denied
+    if (this.deniedPaths.some(deniedPath => filePath.startsWith(deniedPath))) {
+      return false;
+    }
+    
+    // For other paths, prompt the user
+    return null; // null means "ask"
+  },
+  
+  // Add path to allowed list
+  allowPath(path) {
+    if (!this.allowedPaths.includes(path)) {
+      this.allowedPaths.push(path);
+      // Save permissions
+      store.set('filePermissions.allowedPaths', this.allowedPaths);
+    }
+  },
+  
+  // Add path to denied list
+  denyPath(path) {
+    if (!this.deniedPaths.includes(path)) {
+      this.deniedPaths.push(path);
+      // Save permissions
+      store.set('filePermissions.deniedPaths', this.deniedPaths);
+    }
+  },
+  
+  // Load saved permissions
+  loadPermissions() {
+    this.allowedPaths = store.get('filePermissions.allowedPaths') || [];
+    this.deniedPaths = store.get('filePermissions.deniedPaths') || [];
+  }
+};
+
+// Load permissions
+filePermissions.loadPermissions();
 
 function createWindow() {
   // Get stored window dimensions
@@ -151,6 +204,13 @@ function createMenu() {
           accelerator: 'CmdOrCtrl+Shift+S',
           click: () => {
             mainWindow.webContents.send('save-file-as');
+          }
+        },
+        { type: 'separator' },
+        {
+          label: 'Manage File Permissions',
+          click: async () => {
+            mainWindow.webContents.send('show-permissions-manager');
           }
         },
         { type: 'separator' },
@@ -355,8 +415,41 @@ function registerIpcHandlers() {
   });
 
   // File operations
-  ipcMain.on('read-file', (event, filePath) => {
+  ipcMain.on('read-file', async (event, filePath) => {
     try {
+      // Check permissions
+      const isAllowed = filePermissions.isPathAllowed(filePath);
+      
+      if (isAllowed === false) {
+        event.reply('file-error', { filePath, error: 'Permission denied' });
+        return;
+      }
+      
+      if (isAllowed === null) {
+        // Ask for permission
+        const { response } = await dialog.showMessageBox({
+          type: 'question',
+          buttons: ['Allow', 'Deny', 'Allow Always', 'Deny Always'],
+          defaultId: 0,
+          title: 'File Access Permission',
+          message: 'Do you want to allow access to this file?',
+          detail: filePath
+        });
+        
+        if (response === 0) { // Allow once
+          // Continue with read operation
+        } else if (response === 1) { // Deny once
+          event.reply('file-error', { filePath, error: 'Permission denied by user' });
+          return;
+        } else if (response === 2) { // Allow always
+          filePermissions.allowPath(path.dirname(filePath));
+        } else if (response === 3) { // Deny always
+          filePermissions.denyPath(path.dirname(filePath));
+          event.reply('file-error', { filePath, error: 'Permission denied by user' });
+          return;
+        }
+      }
+      
       const content = fs.readFileSync(filePath, 'utf8');
       event.reply('file-content', { filePath, content });
       
@@ -372,8 +465,41 @@ function registerIpcHandlers() {
     }
   });
 
-  ipcMain.on('write-file', (event, filePath, content) => {
+  ipcMain.on('write-file', async (event, filePath, content) => {
     try {
+      // Check permissions
+      const isAllowed = filePermissions.isPathAllowed(filePath);
+      
+      if (isAllowed === false) {
+        event.reply('file-error', { filePath, error: 'Permission denied' });
+        return;
+      }
+      
+      if (isAllowed === null) {
+        // Ask for permission
+        const { response } = await dialog.showMessageBox({
+          type: 'question',
+          buttons: ['Allow', 'Deny', 'Allow Always', 'Deny Always'],
+          defaultId: 0,
+          title: 'File Access Permission',
+          message: 'Do you want to allow writing to this file?',
+          detail: filePath
+        });
+        
+        if (response === 0) { // Allow once
+          // Continue with write operation
+        } else if (response === 1) { // Deny once
+          event.reply('file-error', { filePath, error: 'Permission denied by user' });
+          return;
+        } else if (response === 2) { // Allow always
+          filePermissions.allowPath(path.dirname(filePath));
+        } else if (response === 3) { // Deny always
+          filePermissions.denyPath(path.dirname(filePath));
+          event.reply('file-error', { filePath, error: 'Permission denied by user' });
+          return;
+        }
+      }
+      
       fs.writeFileSync(filePath, content, 'utf8');
       event.reply('file-saved', { filePath, success: true });
     } catch (err) {
@@ -435,6 +561,24 @@ function registerIpcHandlers() {
       return true;
     }
     return false;
+  });
+  
+  // Permissions operations
+  ipcMain.handle('get-file-permissions', async () => {
+    return {
+      allowedPaths: filePermissions.allowedPaths,
+      deniedPaths: filePermissions.deniedPaths
+    };
+  });
+  
+  ipcMain.handle('allow-path', async (event, path) => {
+    filePermissions.allowPath(path);
+    return true;
+  });
+  
+  ipcMain.handle('deny-path', async (event, path) => {
+    filePermissions.denyPath(path);
+    return true;
   });
 }
 

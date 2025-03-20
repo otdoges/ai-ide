@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <title>VSCodium-style IDE with AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codium AI IDE</title>
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="../../node_modules/@vscode/codicons/dist/codicon.css">
     <script src="../../node_modules/monaco-editor/min/vs/loader.js"></script>
@@ -12,85 +13,151 @@
     <div class="container">
         <div class="activity-bar">
             <div class="activity-bar-icon active" title="Explorer">
-                <span class="codicon codicon-files"></span>
+                <i class="codicon codicon-files"></i>
             </div>
             <div class="activity-bar-icon" title="Search">
-                <span class="codicon codicon-search"></span>
+                <i class="codicon codicon-search"></i>
             </div>
             <div class="activity-bar-icon" title="Source Control">
-                <span class="codicon codicon-source-control"></span>
+                <i class="codicon codicon-source-control"></i>
             </div>
-            <div class="activity-bar-icon" title="Run and Debug">
-                <span class="codicon codicon-debug"></span>
+            <div class="activity-bar-icon" title="Run & Debug">
+                <i class="codicon codicon-debug-alt"></i>
             </div>
             <div class="activity-bar-icon" title="Extensions">
-                <span class="codicon codicon-extensions"></span>
+                <i class="codicon codicon-extensions"></i>
+            </div>
+            <div class="activity-bar-spacer"></div>
+            <div class="activity-bar-icon" title="Settings">
+                <i class="codicon codicon-gear"></i>
             </div>
             <div class="activity-bar-icon" title="AI Assistant">
-                <span class="codicon codicon-light-bulb"></span>
+                <i class="codicon codicon-comment-discussion"></i>
             </div>
         </div>
 
         <div class="sidebar">
             <div class="sidebar-header">
-                <span class="sidebar-title">Explorer</span>
+                <div class="sidebar-title">EXPLORER</div>
                 <div class="sidebar-actions">
-                    <span class="codicon codicon-new-file" title="New File"></span>
-                    <span class="codicon codicon-new-folder" title="New Folder"></span>
-                    <span class="codicon codicon-refresh" title="Refresh"></span>
-                    <span class="codicon codicon-collapse-all" title="Collapse Folders"></span>
+                    <div class="sidebar-action" title="New File">
+                        <i class="codicon codicon-new-file"></i>
+                    </div>
+                    <div class="sidebar-action" title="New Folder">
+                        <i class="codicon codicon-new-folder"></i>
+                    </div>
+                    <div class="sidebar-action" title="Refresh Explorer">
+                        <i class="codicon codicon-refresh"></i>
+                    </div>
+                    <div class="sidebar-action" title="Collapse All">
+                        <i class="codicon codicon-collapse-all"></i>
+                    </div>
                 </div>
             </div>
-            <div id="file-tree"></div>
+            <div class="file-explorer">
+                <!-- File tree will be populated dynamically -->
+            </div>
         </div>
         
-        <div class="main-content">
-            <div class="editor-tabs">
-                <div class="editor-tab active">
-                    <span class="codicon codicon-code"></span>
-                    <span class="tab-title">untitled.js</span>
-                    <span class="codicon codicon-close editor-tab-close"></span>
-                </div>
-            </div>
-            
-            <div class="editor-container" id="editor-container"></div>
-            
-            <div class="terminal-container" id="terminal-container">
-                <div class="terminal-output"></div>
-                <div class="terminal-input-line">
-                    <span class="terminal-prompt">$</span>
-                    <input type="text" class="terminal-input" placeholder="Type commands here...">
-                </div>
-            </div>
-            
-            <div class="chat-container">
-                <div class="chat-header">
-                    <span class="sidebar-title">AI Assistant</span>
-                    <div class="chat-actions">
-                        <span class="codicon codicon-clear-all" title="Clear Chat"></span>
-                        <span class="codicon codicon-close" title="Close Panel"></span>
+        <div class="extensions-panel hidden">
+            <div class="sidebar-header">
+                <div class="sidebar-title">EXTENSIONS</div>
+                <div class="sidebar-actions">
+                    <div class="sidebar-action" title="Filter Extensions">
+                        <i class="codicon codicon-filter"></i>
+                    </div>
+                    <div class="sidebar-action" title="Install from VSIX">
+                        <i class="codicon codicon-desktop-download"></i>
+                    </div>
+                    <div class="sidebar-action" title="More Actions">
+                        <i class="codicon codicon-more"></i>
+                    </div>
+                    <div class="sidebar-action" title="Close">
+                        <i class="codicon codicon-close"></i>
                     </div>
                 </div>
-                <div class="chat-messages" id="chat-messages">
-                    <div class="message ai-message">
-                        <p>Hello! I'm your AI assistant. How can I help you with your code today?</p>
-                    </div>
+            </div>
+            <div class="extensions-search">
+                <input type="text" class="extensions-search-input" placeholder="Search Extensions..." />
+            </div>
+            <div class="extensions-list">
+                <!-- Extensions will be populated dynamically -->
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active">
+                <span class="codicon codicon-file"></span>
+                <span class="tab-title">Untitled-1</span>
+                <span class="tab-close"><i class="codicon codicon-close"></i></span>
+            </div>
+            <div class="tab">
+                <span class="codicon codicon-file-code"></span>
+                <span class="tab-title">script.js</span>
+                <span class="tab-close"><i class="codicon codicon-close"></i></span>
+            </div>
+        </div>
+        
+        <div class="editor-container" id="editor-container">
+            <!-- Monaco Editor will be initialized here -->
+        </div>
+        
+        <div class="terminal-container" id="terminal-container">
+            <div class="terminal-output"></div>
+            <div class="terminal-input-line">
+                <span class="terminal-prompt">$</span>
+                <input type="text" class="terminal-input" placeholder="Type commands here...">
+            </div>
+        </div>
+        
+        <div class="chat-container hidden">
+            <div class="chat-header">
+                <div class="chat-title">AI Assistant</div>
+                <div class="chat-close">
+                    <i class="codicon codicon-close"></i>
                 </div>
-                <div class="chat-input-container">
-                    <textarea id="chat-input" placeholder="Ask AI anything..."></textarea>
-                    <button id="send-button">Send</button>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message ai-message">
+                    Hello! I'm your AI assistant. How can I help you with your code today?
                 </div>
+            </div>
+            <div class="chat-input-container">
+                <textarea id="chat-input" class="chat-input" placeholder="Ask AI anything..." rows="2"></textarea>
+                <button id="send-button" class="send-button">Send</button>
             </div>
         </div>
     </div>
     
     <div class="status-bar">
-        <span>Ready</span>
-        <div class="status-bar-right">
-            <span class="status-item">JavaScript</span>
-            <span class="status-item">UTF-8</span>
-            <span class="status-item">Spaces: 2</span>
-            <span class="status-item">Ln 1, Col 1</span>
+        <div class="status-left">
+            <div class="status-item">
+                <i class="codicon codicon-git-branch status-icon"></i>
+                <span>main</span>
+            </div>
+            <div class="status-item">
+                <i class="codicon codicon-sync status-icon"></i>
+                <span>0 ↓ 0 ↑</span>
+            </div>
+            <div class="status-item">
+                <i class="codicon codicon-error status-icon"></i>
+                <span>0</span>
+            </div>
+            <div class="status-item">
+                <i class="codicon codicon-warning status-icon"></i>
+                <span>0</span>
+            </div>
+        </div>
+        <div class="status-right">
+            <div class="status-item">
+                <span>Ln 1, Col 1</span>
+            </div>
+            <div class="status-item">
+                <span>Spaces: 2</span>
+            </div>
+            <div class="status-item">
+                <span>UTF-8</span>
+            </div>
         </div>
     </div>
     
@@ -100,5 +167,7 @@
     </div>
     
     <script src="../../dist/renderer.bundle.js"></script>
+    <script src="scripts/extensions.js"></script>
+    <script src="scripts/themes.js"></script>
 </body>
 </html> 
