@@ -28,7 +28,7 @@ const applyTheme = (theme) => {
 };
 
 // Initialize Monaco Editor
-require.config({ paths: { 'vs': 'node_modules/monaco-editor/min/vs' }});
+require.config({ paths: { 'vs': '../../node_modules/monaco-editor/min/vs' }});
 
 let editor;
 require(['vs/editor/editor.main'], function() {
@@ -300,7 +300,7 @@ activityBarIcons.forEach((icon, index) => {
 });
 
 // Import our AI service
-import aiService from './aiService.js';
+import aiService from '../shared/aiService.js';
 
 // Initialize AI Chat functionality
 async function sendMessage(message) {

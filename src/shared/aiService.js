@@ -1,41 +1,41 @@
+import 'dotenv/config';
 import OpenAI from 'openai';
-import dotenv from 'dotenv';
-
-// Load environment variables
-dotenv.config();
-
-const token = process.env.GITHUB_TOKEN;
+import { OpenAIStream, StreamingTextResponse } from 'ai';
 
 class AIService {
   constructor() {
+    // Initialize OpenAI client
     this.client = new OpenAI({
-      baseURL: "https://models.inference.ai.azure.com",
-      apiKey: token
+      apiKey: process.env.OPENAI_API_KEY || '',
     });
   }
 
-  async generateCompletion(userMessage, systemMessage = "") {
+  async generateCompletion(prompt) {
+    if (!this.client.apiKey) {
+      return {
+        success: false,
+        content: 'OpenAI API key is missing. Please set OPENAI_API_KEY environment variable.'
+      };
+    }
+
     try {
+      // Call OpenAI API
       const response = await this.client.chat.completions.create({
-        messages: [
-          { role: "system", content: systemMessage || "You are an AI programming assistant in an IDE. Help with coding questions and provide clear, concise answers." },
-          { role: "user", content: userMessage }
-        ],
-        model: "gpt-4o",
+        model: 'gpt-3.5-turbo',
+        messages: [{ role: 'user', content: prompt }],
         temperature: 0.7,
-        max_tokens: 4096,
-        top_p: 1
+        max_tokens: 1000,
       });
 
       return {
-        content: response.choices[0].message.content,
-        success: true
+        success: true,
+        content: response.choices[0].message.content
       };
     } catch (error) {
-      console.error("AI Service Error:", error);
+      console.error('OpenAI API error:', error);
       return {
-        content: `Error: ${error.message || "Unknown error occurred"}`,
-        success: false
+        success: false,
+        content: error.message || 'An error occurred while generating the completion'
       };
     }
   }
@@ -56,4 +56,6 @@ ${prompt}`;
   }
 }
 
-export default new AIService(); 
+// Export a singleton instance
+const aiService = new AIService();
+export default aiService; 
