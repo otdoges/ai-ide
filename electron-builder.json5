@@ -1,0 +1,87 @@
+// @see - https://www.electron.build/configuration/configuration
+{
+  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  "appId": "com.ai-ide.app",
+  "asar": true,
+  "productName": "AI IDE",
+  "directories": {
+    "output": "build/release/${version}"
+  },
+  "files": [
+    "dist",
+    "dist-electron"
+  ],
+  "asarUnpack": [
+    "node_modules/**/*",
+    "dist/assets/**/*"
+  ],
+  "mac": {
+    "target": [
+      "dmg"
+    ],
+    "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
+  },
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": [
+          "x64"
+        ]
+      }
+    ],
+    "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "deleteAppDataOnUninstall": false
+  },
+  "linux": {
+    "target": [
+      "AppImage"
+    ],
+    "artifactName": "${productName}-Linux-${version}.${ext}",
+    "executableName": "ai-ide",
+    "category": "Development",
+    "extraResources": [
+      {
+        "from": "build/icon.png",
+        "to": "icon.png"
+      }
+    ],
+    "buildResources": "build",
+    "desktop": {
+      "Name": "AI IDE",
+      "Comment": "AI-powered IDE",
+      "Categories": "Development;IDE;Programming"
+    }
+  },
+  "extraMetadata": {
+    "build": {
+      "electronVersion": "36.2.0"
+    }
+  },
+  "electronDownload": {
+    "mirror": "https://github.com/electron/electron/releases/download/"
+  },
+  "compression": "maximum",
+  "fileAssociations": [
+    {
+      "ext": "js",
+      "name": "JavaScript File",
+      "role": "Editor"
+    },
+    {
+      "ext": "ts",
+      "name": "TypeScript File",
+      "role": "Editor"
+    },
+    {
+      "ext": "json",
+      "name": "JSON File",
+      "role": "Editor"
+    }
+  ]
+}

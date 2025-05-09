@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  ai-ide:
+    build: .
+    ports:
+      - "5173:5173"
+    environment:
+      - NODE_ENV=production
+    command: ["node", "dist/main.js"]
